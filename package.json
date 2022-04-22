@@ -1,0 +1,12 @@
+{
+	"name": "alexa-greet",
+	"version": "1.0.0",
+	"description": "Example project to try out new technologies",
+	"author": "",
+	"license": "MIT",
+	"dependencies": {
+		"ask-sdk-core": "^2.12.1",
+		"ask-sdk-dynamodb-persistence-adapter": "^2.12.1",
+		"aws-sdk": "^2.1120.0"
+	}
+}
