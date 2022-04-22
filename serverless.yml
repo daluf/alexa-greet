@@ -62,7 +62,7 @@ functions:
   skill:
     handler: skill.handler
     events:
-      - alexaSkill: null
+      - alexaSkill: amzn1.ask.skill.d10bb781-f277-47c8-a85e-fe7820c0c24c
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
