@@ -2,6 +2,12 @@ const Alexa = require("ask-sdk-core");
 const dynamoDBUtils = require("./utils");
 
 // user starts skill
+/*
+	what are we doing here?
+	1) check how many times the user has started the app (and save it in dynamodb)
+	2) depending on the amount of visits, play a different speech (in this case for the first, second and all other visits)
+	3) play audio stream
+*/
 const LaunchRequestHandler = {
 	canHandle(handlerInput) {
 		return Alexa.getRequestType(handlerInput.requestEnvelope) === "LaunchRequest";
