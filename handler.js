@@ -126,12 +126,6 @@ const SessionEndedRequestHandler = {
 	},
 };
 
-const loadInterceptor = {
-	process(handlerInput) {
-		console.log("handlerInput", JSON.stringify(handlerInput, null, 2));
-	}
-}
-
 module.exports.skill = Alexa.SkillBuilders.custom()
 	.addRequestHandlers(
 		LaunchRequestHandler,
@@ -143,6 +137,4 @@ module.exports.skill = Alexa.SkillBuilders.custom()
 		SessionEndedRequestHandler
 	)
 	.addErrorHandlers(ErrorHandler)
-	.addRequestInterceptors(loadInterceptor)
-	.addResponseInterceptors(loadInterceptor)
 	.lambda();
