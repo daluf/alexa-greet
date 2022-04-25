@@ -23,7 +23,7 @@ provider:
 
 functions:
   skill:
-    handler: handler.skill
+    handler: "./src/handler.skill"
     events:
       - alexaSkill: amzn1.ask.skill.98e1acf2-db0f-4f22-93f8-7e4df276c148
 resources:
