@@ -1,6 +1,4 @@
 import * as Alexa from 'ask-sdk-core';
-import { CustomSkillErrorHandler } from 'ask-sdk-core/dist/dispatcher/error/handler/CustomSkillErrorHandler';
-import { CustomSkillRequestHandler } from 'ask-sdk-core/dist/dispatcher/request/handler/CustomSkillRequestHandler';
 import * as dynamoDBUtils from "./utils";
 
 // user starts skill
@@ -10,7 +8,7 @@ import * as dynamoDBUtils from "./utils";
 	2) depending on the amount of visits, play a different speech (in this case for the first, second and all other visits)
 	3) play audio stream
 */
-const LaunchRequestHandler: CustomSkillRequestHandler = {
+const LaunchRequestHandler: Alexa.RequestHandler = {
 	canHandle(handlerInput) {
 		return Alexa.getRequestType(handlerInput.requestEnvelope) === "LaunchRequest";
 	},
@@ -45,7 +43,7 @@ const LaunchRequestHandler: CustomSkillRequestHandler = {
 };
 
 // resume radio playback
-const ResumeHandler: CustomSkillRequestHandler = {
+const ResumeHandler: Alexa.RequestHandler = {
 	canHandle(handlerInput) {
 		return Alexa.getRequestType(handlerInput.requestEnvelope) === "IntentRequest" && Alexa.getIntentName(handlerInput.requestEnvelope) === "AMAZON.ResumeIntent";
 	},
@@ -59,7 +57,7 @@ const ResumeHandler: CustomSkillRequestHandler = {
 };
 
 // pause radio playblack
-const PauseHandler: CustomSkillRequestHandler = {
+const PauseHandler: Alexa.RequestHandler = {
 	canHandle(handlerInput) {
 		return Alexa.getRequestType(handlerInput.requestEnvelope) === "IntentRequest" && Alexa.getIntentName(handlerInput.requestEnvelope) === "AMAZON.PauseIntent";
 	},
@@ -69,7 +67,7 @@ const PauseHandler: CustomSkillRequestHandler = {
 };
 
 // handler for generic audio events
-const AudioPlayerHandler: CustomSkillRequestHandler = {
+const AudioPlayerHandler: Alexa.RequestHandler = {
 	canHandle(handlerInput) {
 		return handlerInput.requestEnvelope.request.type.startsWith('AudioPlayer.');
 	},
@@ -78,7 +76,7 @@ const AudioPlayerHandler: CustomSkillRequestHandler = {
 	}
 }
 
-const FinishHandler: CustomSkillRequestHandler = {
+const FinishHandler: Alexa.RequestHandler = {
 	canHandle(handlerInput) {
 		// check if "cancel" or "stop" is intented
 		return (
@@ -92,7 +90,7 @@ const FinishHandler: CustomSkillRequestHandler = {
 };
 
 // generic fallback handler
-const FallbackHandler: CustomSkillRequestHandler = {
+const FallbackHandler: Alexa.RequestHandler = {
 	canHandle(handlerInput) {
 		return Alexa.getRequestType(handlerInput.requestEnvelope) === "FallbackIntent";
 	},
@@ -104,7 +102,7 @@ const FallbackHandler: CustomSkillRequestHandler = {
 };
 
 // user (or alexa) ends the skill
-const SessionEndedRequestHandler: CustomSkillRequestHandler = {
+const SessionEndedRequestHandler: Alexa.RequestHandler = {
 	canHandle(handlerInput) {
 		return Alexa.getRequestType(handlerInput.requestEnvelope) === "SessionEndedRequest";
 	},
@@ -114,7 +112,7 @@ const SessionEndedRequestHandler: CustomSkillRequestHandler = {
 };
 
 // generic error handler
-const ErrorHandler: CustomSkillErrorHandler = {
+const ErrorHandler: Alexa.ErrorHandler = {
 	canHandle() {
 		return true;
 	},
