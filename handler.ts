@@ -1,5 +1,7 @@
-const Alexa = require("ask-sdk-core");
-const dynamoDBUtils = require("./utils");
+import * as Alexa from 'ask-sdk-core';
+import { CustomSkillErrorHandler } from 'ask-sdk-core/dist/dispatcher/error/handler/CustomSkillErrorHandler';
+import { CustomSkillRequestHandler } from 'ask-sdk-core/dist/dispatcher/request/handler/CustomSkillRequestHandler';
+import * as dynamoDBUtils from "./utils";
 
 // user starts skill
 /*
@@ -8,7 +10,7 @@ const dynamoDBUtils = require("./utils");
 	2) depending on the amount of visits, play a different speech (in this case for the first, second and all other visits)
 	3) play audio stream
 */
-const LaunchRequestHandler = {
+const LaunchRequestHandler: CustomSkillRequestHandler = {
 	canHandle(handlerInput) {
 		return Alexa.getRequestType(handlerInput.requestEnvelope) === "LaunchRequest";
 	},
@@ -35,17 +37,15 @@ const LaunchRequestHandler = {
 		// save amount of visits in db
 		await dynamoDBUtils.saveItem(userId, visitCount + 1);
 
-		return (
-			handlerInput.responseBuilder
-				.speak(speechResponse)
-				.addAudioPlayerPlayDirective("REPLACE_ALL", "https://wdr-wdr2-rheinland.icecastssl.wdr.de/wdr/wdr2/rheinland/mp3/128/stream.mp3", "0", 0)
-				.getResponse()
-		);
+		return handlerInput.responseBuilder
+			.speak(speechResponse)
+			.addAudioPlayerPlayDirective("REPLACE_ALL", "https://wdr-wdr2-rheinland.icecastssl.wdr.de/wdr/wdr2/rheinland/mp3/128/stream.mp3", "0", 0)
+			.getResponse();
 	},
 };
 
 // resume radio playback
-const ResumeHandler = {
+const ResumeHandler: CustomSkillRequestHandler = {
 	canHandle(handlerInput) {
 		return Alexa.getRequestType(handlerInput.requestEnvelope) === "IntentRequest" && Alexa.getIntentName(handlerInput.requestEnvelope) === "AMAZON.ResumeIntent";
 	},
@@ -59,7 +59,7 @@ const ResumeHandler = {
 };
 
 // pause radio playblack
-const PauseHandler = {
+const PauseHandler: CustomSkillRequestHandler = {
 	canHandle(handlerInput) {
 		return Alexa.getRequestType(handlerInput.requestEnvelope) === "IntentRequest" && Alexa.getIntentName(handlerInput.requestEnvelope) === "AMAZON.PauseIntent";
 	},
@@ -69,7 +69,7 @@ const PauseHandler = {
 };
 
 // handler for generic audio events
-const AudioPlayerHandler = {
+const AudioPlayerHandler: CustomSkillRequestHandler = {
 	canHandle(handlerInput) {
 		return handlerInput.requestEnvelope.request.type.startsWith('AudioPlayer.');
 	},
@@ -78,7 +78,7 @@ const AudioPlayerHandler = {
 	}
 }
 
-const FinishHandler = {
+const FinishHandler: CustomSkillRequestHandler = {
 	canHandle(handlerInput) {
 		// check if "cancel" or "stop" is intented
 		return (
@@ -92,7 +92,7 @@ const FinishHandler = {
 };
 
 // generic fallback handler
-const FallbackHandler = {
+const FallbackHandler: CustomSkillRequestHandler = {
 	canHandle(handlerInput) {
 		return Alexa.getRequestType(handlerInput.requestEnvelope) === "FallbackIntent";
 	},
@@ -103,8 +103,18 @@ const FallbackHandler = {
 	},
 };
 
+// user (or alexa) ends the skill
+const SessionEndedRequestHandler: CustomSkillRequestHandler = {
+	canHandle(handlerInput) {
+		return Alexa.getRequestType(handlerInput.requestEnvelope) === "SessionEndedRequest";
+	},
+	handle(handlerInput) {
+		return handlerInput.responseBuilder.getResponse();
+	},
+};
+
 // generic error handler
-const ErrorHandler = {
+const ErrorHandler: CustomSkillErrorHandler = {
 	canHandle() {
 		return true;
 	},
@@ -113,16 +123,6 @@ const ErrorHandler = {
 		console.error("ERROR:", error);
 
 		return handlerInput.responseBuilder.speak(speakOutput).reprompt(speakOutput).getResponse();
-	},
-};
-
-// user (or alexa) ends the skill
-const SessionEndedRequestHandler = {
-	canHandle(handlerInput) {
-		return Alexa.getRequestType(handlerInput.requestEnvelope) === "SessionEndedRequest";
-	},
-	handle(handlerInput) {
-		return handlerInput.responseBuilder.getResponse();
 	},
 };
 
