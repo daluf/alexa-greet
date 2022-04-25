@@ -1,5 +1,5 @@
 import * as Alexa from 'ask-sdk-core';
-import * as dynamoDBUtils from "./utils";
+import { dynamoDBUtils } from "./utils";
 
 // user starts skill
 /*

@@ -1,11 +1,13 @@
-const AWS = require("aws-sdk");
+import * as AWS from "aws-sdk";
+
 const dynamoDBClient = new AWS.DynamoDB({ apiVersion: 'latest', region: process.env.DYNAMODB_REGION })
+const DYNAMODB_TABLE = process.env.DYNAMODB_TABLE ?? "usersTable";
 
 class DynamoDBUtils {
-	getItem = async (id) => {
+	getItem = async (id: string): Promise<AWS.DynamoDB.AttributeMap | {}> => {
 		return new Promise((resolve, reject) => {
 			dynamoDBClient.getItem({
-				TableName: process.env.DYNAMODB_TABLE,
+				TableName: DYNAMODB_TABLE,
 				Key: {
 					userId: { S: id }
 				}
@@ -21,10 +23,10 @@ class DynamoDBUtils {
 		})
 	}
 
-	saveItem = async (id, visitCount) => {
+	saveItem = async (id: string, visitCount: number): Promise<AWS.DynamoDB.UpdateItemOutput> => {
 		return new Promise((resolve, reject) => {
 			dynamoDBClient.updateItem({
-				TableName: process.env.DYNAMODB_TABLE,
+				TableName: DYNAMODB_TABLE,
 				Key: {
 					userId: { S: id }
 				},
@@ -41,4 +43,4 @@ class DynamoDBUtils {
 	}
 }
 
-module.exports = new DynamoDBUtils();
+export const dynamoDBUtils = new DynamoDBUtils();
